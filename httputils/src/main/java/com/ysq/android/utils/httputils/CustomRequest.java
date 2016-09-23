@@ -1,18 +1,12 @@
 package com.ysq.android.utils.httputils;
 
-import com.alibaba.fastjson.JSON;
 import com.android.volley.AuthFailureError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,7 +26,6 @@ public class CustomRequest extends StringRequest {
     private final Map<String, String> params;
     private final String requestKey;
     private final String requestBody;
-    private final String bodyContentType;
     private final int timeoutMillisecond;
 
     public CustomRequest(HttpUtils.RequestBuilder builder) {
@@ -41,7 +34,6 @@ public class CustomRequest extends StringRequest {
         params = builder.getParams();
         requestKey = builder.getRequestKey();
         requestBody = builder.getRequestBody();
-        bodyContentType = builder.getBodyContentType();
         timeoutMillisecond = builder.getTimeoutMillisecond();
     }
 
@@ -58,7 +50,7 @@ public class CustomRequest extends StringRequest {
     @Override
     public byte[] getBody() throws AuthFailureError {
         try {
-            return requestBody == null ? null : requestBody.getBytes(PROTOCOL_CHARSET);
+            return requestBody == null ? super.getBody() : requestBody.getBytes(PROTOCOL_CHARSET);
         } catch (UnsupportedEncodingException uee) {
             return null;
         }
@@ -66,7 +58,7 @@ public class CustomRequest extends StringRequest {
 
     @Override
     public String getBodyContentType() {
-        return bodyContentType != null ? bodyContentType : super.getBodyContentType();
+        return requestBody != null ? PROTOCOL_CONTENT_TYPE : super.getBodyContentType();
     }
 
     public String getRequestKey() {

@@ -82,7 +82,6 @@ public class HttpUtils {
         private boolean cancelSame;
         private String requestKey;
         private String requestBody;
-        private String bodyContentType;
         private Class<? extends IResponseDTO> clazz;
         private int timeoutMillisecond = DEFAULT_TIMEOUT_MILLISECOND;
         private Response.Listener successListener = new Response.Listener<String>() {
@@ -156,6 +155,11 @@ public class HttpUtils {
             return this;
         }
 
+        public RequestBuilder url(String url) {
+            this.url = url;
+            return this;
+        }
+
         public RequestBuilder addHeader(String key, String value) {
             if (headers == null) {
                 headers = new HashMap<>();
@@ -194,11 +198,6 @@ public class HttpUtils {
 
         public RequestBuilder requestBody(String requestBody) {
             this.requestBody = requestBody;
-            return this;
-        }
-
-        public RequestBuilder bodyContentType(String bodyContentType) {
-            this.bodyContentType = bodyContentType;
             return this;
         }
 
@@ -243,10 +242,6 @@ public class HttpUtils {
 
         public String getRequestBody() {
             return requestBody;
-        }
-
-        public String getBodyContentType() {
-            return bodyContentType;
         }
 
         public int getTimeoutMillisecond() {

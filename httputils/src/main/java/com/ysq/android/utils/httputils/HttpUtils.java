@@ -12,6 +12,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.ysq.android.utils.logger.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -87,6 +88,7 @@ public class HttpUtils {
         private Response.Listener successListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Logger.d(response);
                 if (callBack == null) {
                     return;
                 }
@@ -99,12 +101,18 @@ public class HttpUtils {
                     e.printStackTrace();
                     return;
                 }
-                if (!ret.isSuccess()) {
-                    YResponseError error = new YResponseError(YResponseError.Type.OPERATEERROR);
-                    callBack.onRequestFailed(url + requestKey, error, ret.getErrorResult());
-                } else {
-                    callBack.onRequestSuccess(url + requestKey, clazz == null ? ret : ret.getSuccessResult());
+                try {
+                    if (!ret.isSuccess()) {
+                        YResponseError error = new YResponseError(YResponseError.Type.OPERATEERROR);
+                        callBack.onRequestFailed(url + requestKey, error, ret.getErrorResult());
+                    } else {
+                        callBack.onRequestSuccess(url + requestKey, clazz == null ? ret : ret.getSuccessResult());
+                    }
+                } catch (NullPointerException e) {
+                    YResponseError error = new YResponseError(YResponseError.Type.DECODEERROR);
+                    callBack.onRequestFailed(url + requestKey, error, response);
                 }
+
             }
         };
         private Response.ErrorListener errorListener = new Response.ErrorListener() {

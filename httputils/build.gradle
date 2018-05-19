@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 // 这个version是library的版本，更新后也需要更改这个值
-version = "1.0.3"
+version = "1.0.6"
 
 android {
     compileSdkVersion 23
@@ -32,6 +32,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.alibaba:fastjson:1.2.15'
+    compile 'com.ysq.android.utils:androidlogger:1.0.0'
 }
 
 def siteUrl = 'https://github.com/yshqing/HttpUtils'// 项目的主页
